@@ -2,39 +2,31 @@ package com.example.myfloatingwidget;
 
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 public class MainActivity extends AppCompatActivity {
-    Button buttonWidget;
+    Button openWidgetButton, closeWidgetButton;
+    EditText baseUrlInput;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//
-//        if(!Settings.canDrawOverlays(MainActivity.this)) {
-//            getPermission();
-//        } else {
-//            Intent intent = new Intent(MainActivity.this, WidgetService.class);
-//            startService(intent);
-//        }
+        baseUrlInput = findViewById(R.id.base_url_input);
+        baseUrlInput.setText(R.string.url);
 
-        buttonWidget = findViewById(R.id.button);
+        openWidgetButton = findViewById(R.id.open_button);
         getPermission();
-        buttonWidget.setOnClickListener(new View.OnClickListener() {
+        openWidgetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(!Settings.canDrawOverlays(MainActivity.this)) {
@@ -43,6 +35,16 @@ public class MainActivity extends AppCompatActivity {
                     Intent intent = new Intent(MainActivity.this, WidgetService.class);
                     startService(intent);
                 }
+            }
+        });
+
+
+        closeWidgetButton = findViewById(R.id.close_button);
+        closeWidgetButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, WidgetService.class);
+                stopService(intent);
             }
         });
 

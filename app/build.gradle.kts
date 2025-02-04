@@ -32,7 +32,12 @@ android {
 }
 
 dependencies {
-
+    // Retrofit
+    implementation(libs.retrofit)
+    // Retrofit with Scalar Converter
+    implementation(libs.converter.scalars)
+    // Jackson
+    implementation(libs.retrofit2.converter.jackson)
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
