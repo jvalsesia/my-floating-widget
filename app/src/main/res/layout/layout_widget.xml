@@ -5,44 +5,46 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/text_widget"
-        android:layout_width="200dp"
-        android:layout_height="81dp"
-        android:background="@drawable/ic_launcher_background"
-        android:gravity="bottom"
-        android:text="10"
-        android:textColor="#000000"
-        android:textSize="22dp"
-        android:textStyle="bold"
-        tools:layout_editor_absoluteX="30dp"
-        tools:layout_editor_absoluteY="252dp" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="top"
-        android:text="Button"
+        <TextView
+            android:id="@+id/text_widget"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
 
-        app:layout_constraintBottom_toTopOf="@+id/text_widget"
-        app:layout_constraintEnd_toStartOf="@+id/text_widget"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/text_widget"
-        app:layout_constraintTop_toBottomOf="@+id/text_widget"
-        app:layout_constraintVertical_bias="0.5" />
 
-    <TextView
-        android:id="@+id/responseTV"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="163dp"
-        android:gravity="center"
-        android:text="TextView"
-        android:textColor="#000000"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/button2"
-        app:layout_constraintTop_toTopOf="@+id/text_widget"
-        app:layout_constraintVertical_bias="0.0"
-        tools:layout_editor_absoluteX="94dp" />
+            android:gravity="bottom"
+            android:text="10"
+            android:textColor="#000000"
+            android:textSize="22dp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            android:background="@drawable/transparent_bg_bordered_button"
+            android:gravity="center"
+            android:text="Door"
+
+            />
+
+        <TextView
+            android:id="@+id/responseTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:gravity="center"
+            android:text="TextView"
+            android:textColor="#000000"
+            android:textStyle="bold" />
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

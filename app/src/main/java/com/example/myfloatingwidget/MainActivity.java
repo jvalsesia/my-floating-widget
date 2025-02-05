@@ -33,6 +33,10 @@ public class MainActivity extends AppCompatActivity {
                     getPermission();
                 } else {
                     Intent intent = new Intent(MainActivity.this, WidgetService.class);
+                    // check if the service is already running
+                    if(WidgetService.isRunning) {
+                        stopService(intent);
+                    }
                     startService(intent);
                 }
             }

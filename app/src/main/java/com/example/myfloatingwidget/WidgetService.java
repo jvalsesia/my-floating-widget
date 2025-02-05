@@ -29,6 +29,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 
 public class WidgetService extends Service {
+    public static boolean isRunning;
     int LAYOUT_FLAG;
     View myFloatingView;
 
@@ -54,27 +55,27 @@ public class WidgetService extends Service {
         }
         // inflate widget layout
         myFloatingView = LayoutInflater.from(this).inflate(R.layout.layout_widget, null);
+
         WindowManager.LayoutParams layoutParams =  new LayoutParams(
                 LayoutParams.WRAP_CONTENT,
                 LayoutParams.WRAP_CONTENT,
                 LAYOUT_FLAG,
                 LayoutParams.FLAG_NOT_FOCUSABLE, PixelFormat.TRANSLUCENT);
         // initial position
-        layoutParams.gravity = Gravity.TOP | Gravity.END;
-        layoutParams.x = 0;
-        layoutParams.y = 400;
+        layoutParams.gravity = Gravity.TOP | Gravity.START;
+        layoutParams.x = 25;
+        layoutParams.y = 650;
 
         // layout params for close button
-
         WindowManager.LayoutParams imageParams =  new LayoutParams(
-                140,
-                140,
+                LayoutParams.WRAP_CONTENT,
+                LayoutParams.WRAP_CONTENT,
                 LAYOUT_FLAG,
                 LayoutParams.FLAG_NOT_FOCUSABLE, PixelFormat.TRANSLUCENT);
         // initial position
-        imageParams.gravity = Gravity.BOTTOM | Gravity.CENTER;
-        imageParams.x = 0;
-        imageParams.y = 100;
+        imageParams.gravity = Gravity.BOTTOM | Gravity.END;
+        imageParams.x = 25;
+        imageParams.y = 650;
 
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
 
@@ -112,7 +113,7 @@ public class WidgetService extends Service {
         }, 10);
 
 
-
+        isRunning = true;
         return START_STICKY;
     }
 
@@ -142,6 +143,7 @@ public class WidgetService extends Service {
     // insert onDestroy
 
     public void closeWidget() {
+        isRunning = false;
         if (myFloatingView != null) {
             windowManager.removeView(myFloatingView);
             myFloatingView = null;
@@ -156,11 +158,6 @@ public class WidgetService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (myFloatingView != null) {
-            windowManager.removeView(myFloatingView);
-        }
-        if (imageClose != null) {
-            windowManager.removeView(imageClose);
-        }
+        closeWidget();
     }
 }
