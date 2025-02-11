@@ -30,9 +30,8 @@
             android:id="@+id/button2"
             android:layout_width="96dp"
             android:layout_height="96dp"
-            android:background="@drawable/transparent_bg_bordered_button"
+            android:background="@drawable/door_open_48px"
             android:gravity="center"
-            android:text="Door"
 
             />
 

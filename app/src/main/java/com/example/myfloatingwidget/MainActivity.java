@@ -1,6 +1,7 @@
 package com.example.myfloatingwidget;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -8,21 +9,43 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
+import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
-    Button openWidgetButton, closeWidgetButton;
-    EditText baseUrlInput;
 
+    private static final String PREFS_NAME = "DoorPrefs";
+    private static final String DOOR_URL_PREF = "doorURLPref";
+    private static final String DOOR_PATH_PREF = "doorPathPref";
+    Button openWidgetButton, closeWidgetButton;
+    EditText baseUrlInput, apiPathInput;
+    private static final String TAG = "MainActivity";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+
         baseUrlInput = findViewById(R.id.base_url_input);
-        baseUrlInput.setText(R.string.url);
+        //baseUrlInput.setText(R.string.url);
+
+        apiPathInput = findViewById(R.id.api_path_input);
+        //apiPathInput.setText(R.string.path);
+
+        loadPreferences();
+
+
+        // insert "/" at the end of path
+        if(!apiPathInput.getText().toString().endsWith("/")) {
+            apiPathInput.setText(apiPathInput.getText().toString().concat("/"));
+        }
+
+        // Log an info message
+        Log.i(TAG, "Base URL: ".concat(baseUrlInput.getText().toString()));
+        Log.i(TAG, "API Path: ".concat(apiPathInput.getText().toString()));
+
 
         openWidgetButton = findViewById(R.id.open_button);
         getPermission();
@@ -33,6 +56,10 @@ public class MainActivity extends AppCompatActivity {
                     getPermission();
                 } else {
                     Intent intent = new Intent(MainActivity.this, WidgetService.class);
+
+                    // Save the preferences
+                    savePreferences(baseUrlInput.getText().toString(), apiPathInput.getText().toString());
+
                     // check if the service is already running
                     if(WidgetService.isRunning) {
                         stopService(intent);
@@ -60,7 +87,19 @@ public class MainActivity extends AppCompatActivity {
 //            return insets;
 //        });
     }
+    private void savePreferences(String baseUrl, String apiPath) {
+        SharedPreferences.Editor editor = getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit();
+        editor.putString(DOOR_URL_PREF, baseUrl);
+        editor.putString(DOOR_PATH_PREF, apiPath);
+        editor.apply();
+    }
 
+    // load preferences
+    private void loadPreferences() {
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        baseUrlInput.setText(prefs.getString(DOOR_URL_PREF, ""));
+        apiPathInput.setText(prefs.getString(DOOR_PATH_PREF, ""));
+    }
 
     public void getPermission() {
         if(!Settings.canDrawOverlays(this)) {

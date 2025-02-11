@@ -6,6 +6,8 @@
     <string name="result_close">Door is closed</string>
     <string name="result_fail">Failed to get door state</string>
     <string name="base_url">Base URL</string>
-    <string name="url">http://192.168.0.106:8080/api/door/state/</string>
+    <string name="url">http://192.168.1.106:8080</string>
+    <string name="api_path">API Path</string>
+    <string name="path">/enu/trigger/opendoor1</string>
 
 </resources>

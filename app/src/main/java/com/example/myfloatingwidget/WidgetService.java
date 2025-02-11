@@ -4,6 +4,7 @@ import static android.view.WindowManager.*;
 
 import android.app.Service;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.PixelFormat;
 import android.os.Build;
 import android.os.Handler;
@@ -27,8 +28,14 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
-
+import android.util.Log;
 public class WidgetService extends Service {
+
+    private static final String PREFS_NAME = "DoorPrefs";
+    private static final String DOOR_URL_PREF = "doorURLPref";
+    private static final String DOOR_PATH_PREF = "doorPathPref";
+    // Define a tag for your log messages
+    private static final String TAG = "WidgetService";
     public static boolean isRunning;
     int LAYOUT_FLAG;
     View myFloatingView;
@@ -53,6 +60,9 @@ public class WidgetService extends Service {
         } else {
             LAYOUT_FLAG = LayoutParams.TYPE_PHONE;
         }
+
+
+
         // inflate widget layout
         myFloatingView = LayoutInflater.from(this).inflate(R.layout.layout_widget, null);
 
@@ -96,7 +106,6 @@ public class WidgetService extends Service {
         helloButton.setOnClickListener(new View.OnClickListener() {
                                            @Override
                                            public void onClick(View view) {
-
                                                getDoorState();
                                            }
                                        });
@@ -117,11 +126,20 @@ public class WidgetService extends Service {
         return START_STICKY;
     }
 
+
+
     private void getDoorState() {
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        String baseUrl = prefs.getString(DOOR_URL_PREF, "");
+        String apiPath = prefs.getString(DOOR_PATH_PREF, "");
+
+        // Log an info message
+        Log.i(TAG, "Base URL: ".concat(baseUrl));
+        Log.i(TAG, "API Path: ".concat(apiPath));
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.0.106:8080/api/door/state/").addConverterFactory(JacksonConverterFactory.create()).build();
+                .baseUrl(baseUrl).addConverterFactory(JacksonConverterFactory.create()).build();
         RequestDoor requestDoor = retrofit.create(RequestDoor.class);
-        requestDoor.getDoorState().enqueue(new Callback<Door>() {
+        requestDoor.getDoorState(baseUrl + apiPath).enqueue(new Callback<Door>() {
             @Override
             public void onResponse(@NonNull Call<Door> call, @NonNull Response<Door> response) {
                 Door door = response.body();
