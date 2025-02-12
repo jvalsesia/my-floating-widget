@@ -43,7 +43,7 @@ public class WidgetService extends Service {
     WindowManager windowManager;
 
     ImageView imageClose;
-    TextView tvWidget, responseTV;
+    TextView responseTV;
     Button helloButton;
     float height, width;
     @Nullable
@@ -60,8 +60,6 @@ public class WidgetService extends Service {
         } else {
             LAYOUT_FLAG = LayoutParams.TYPE_PHONE;
         }
-
-
 
         // inflate widget layout
         myFloatingView = LayoutInflater.from(this).inflate(R.layout.layout_widget, null);
@@ -99,8 +97,7 @@ public class WidgetService extends Service {
         height = windowManager.getDefaultDisplay().getHeight();
         width = windowManager.getDefaultDisplay().getWidth();
 
-        tvWidget = myFloatingView.findViewById(R.id.text_widget);
-        helloButton = myFloatingView.findViewById(R.id.button2);
+        helloButton = myFloatingView.findViewById(R.id.unlock_door_button);
         responseTV = myFloatingView.findViewById(R.id.responseTV);
 
         helloButton.setOnClickListener(new View.OnClickListener() {
@@ -109,17 +106,6 @@ public class WidgetService extends Service {
                                                getDoorState();
                                            }
                                        });
-
-        //show current time
-        final Handler handler =  new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                tvWidget.setText(new SimpleDateFormat("HH:mm:ss").format(new Date()));
-                handler.postDelayed(this, 1000);
-
-            }
-        }, 10);
 
 
         isRunning = true;
@@ -139,20 +125,20 @@ public class WidgetService extends Service {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(baseUrl).addConverterFactory(JacksonConverterFactory.create()).build();
         RequestDoor requestDoor = retrofit.create(RequestDoor.class);
-        requestDoor.getDoorState(baseUrl + apiPath).enqueue(new Callback<Door>() {
+        requestDoor.getDoorState(baseUrl + apiPath).enqueue(new Callback<String>() {
             @Override
-            public void onResponse(@NonNull Call<Door> call, @NonNull Response<Door> response) {
-                Door door = response.body();
-                assert door != null;
-                if(door.open) {
-                    responseTV.setText(R.string.result_open);
-                } else {
-                    responseTV.setText(R.string.result_close);
-                }
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                // get response code
+                int status = response.code();
+
+                Log.i(TAG, "door status: ".concat(String.valueOf(status)));
+                responseTV.setText(String.valueOf(status));
+
             }
 
             @Override
-            public void onFailure(@NonNull Call<Door> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                Log.e(TAG, "door error: " + t.getMessage());
                 responseTV.setText(R.string.result_fail);
             }
         });

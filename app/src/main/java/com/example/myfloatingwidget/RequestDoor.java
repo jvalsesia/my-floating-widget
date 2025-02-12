@@ -6,5 +6,5 @@ import retrofit2.http.Url;
 
 public interface RequestDoor {
     @GET
-    Call<Door> getDoorState(@Url String url);
+    Call<String> getDoorState(@Url String url);
 }

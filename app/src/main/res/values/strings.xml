@@ -2,8 +2,8 @@
     <string name="app_name">My Floating Widget</string>
     <string name="open_widget">Open Widget</string>
     <string name="close_widget">Close Widget</string>
-    <string name="result_open">Door is open</string>
-    <string name="result_close">Door is closed</string>
+    <string name="unlock_door">Unlock Door</string>
+    <string name="result_ok">Unlock Request OK</string>
     <string name="result_fail">Failed to get door state</string>
     <string name="base_url">Base URL</string>
     <string name="url">http://192.168.1.106:8080</string>
